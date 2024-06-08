@@ -1,49 +1,26 @@
-// Importing necessary libraries
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-// Creating a scene
 const scene = new THREE.Scene();
-
-// Creating a camera
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5;
 
-// Creating a renderer
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Adding controls
-const controls = new OrbitControls(camera, renderer.domElement);
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
 
-// Creating a geometry
-const geometry = new THREE.SphereGeometry(0.1, 32, 32);
+camera.position.z = 5;
 
-// Creating a material
-const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+function animate() {
+  requestAnimationFrame(animate);
 
-// Creating a sphere (hand landmark)
-const sphere = new THREE.Mesh(geometry, material);
-scene.add(sphere);
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
 
-// Loading hand landmark data
-fetch('hand_landmarks.json')
-  .then(response => response.json())
-  .then(data => {
-    // Setting up animation
-    let frame = 0;
-    function animate() {
-      requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+}
 
-      // Updating hand landmark position
-      if (frame < data.length) {
-        sphere.position.set(data[frame].x, data[frame].y, data[frame].z);
-        frame++;
-      }
-
-      controls.update();
-      renderer.render(scene, camera);
-    }
-    animate();
-  });
+animate();

@@ -45,6 +45,9 @@ with mp_hands.Hands(static_image_mode=True, max_num_hands=2, min_detection_confi
                 if cv2.waitKey(5) & 0xFF == ord('q'):
                     break
         cap.release()
-        print("Hand Landmarks for video: ", video.split("/")[-1], " extracted successfully!")
+        data[video.split(".")[0].split("/")[-1]].append({
+            "Total Frames: ": frame
+        })
+        print("Hand Landmarks for video: ", video.split("/")[-1], " extracted successfully with ", str(frame), " frames")
     json.dump(data, file)
 file.close()
