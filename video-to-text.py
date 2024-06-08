@@ -58,7 +58,7 @@ def speech_to_text(audio_file):
             return f"Error: {str(e)}"
         
         
-video_file, audio_file = download_video_and_audio("The Wait", 60)
+video_file, audio_file = download_video_and_audio("English in a Minute: Grow Like a Weed", 60)
 
 text = speech_to_text(audio_file)
 print("Converted Text:")
