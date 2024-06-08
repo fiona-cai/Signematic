@@ -21,6 +21,7 @@ with mp_hands.Hands(static_image_mode=True, max_num_hands=2, min_detection_confi
             success, image = cap.read()
             if not success:
                 break
+            image=cv2.resize(image,(640,480))
             results = hands.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
             if results.multi_hand_landmarks:
                 handCords = []
@@ -33,12 +34,17 @@ with mp_hands.Hands(static_image_mode=True, max_num_hands=2, min_detection_confi
                     for joint_id, landmark in enumerate(hand):
                         x,y,z=landmark.x,landmark.y,landmark.z
                         handCords.append({"joint_id":joint_id,"x":x,"y":y,"z":z})
+                    mp_drawing.draw_landmarks(image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
                 data[video.split(".")[0].split("/")[-1]].append({
                     "Frame Number: ": frame,
                     "Left Hand Coordinates: ": handCords if handType == "Left" else[],
                     "Right Hand Coordinates: ": handCords if handType == "Right" else[]
                 })
                 frame += 1
+                
+                cv2.imshow('Hand Tracking', image)
+                if cv2.waitKey(5) & 0xFF == ord('q'):
+                    break
         cap.release()
     json.dump(data, file)
 file.close()
