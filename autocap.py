@@ -13,22 +13,22 @@ except ImportError:
     print("trying to install dependencies")
 
     def install_libraries():
-        required_libraries = ['whisper', 'yt_dlp', 'moviepy']
+        required_libraries = ["whisper", "yt_dlp", "moviepy"]
         current_os = platform.system()
-        
-        if current_os == 'Windows':
-            package_manager = 'pip'
-        elif current_os == 'Darwin':
-            package_manager = 'pip3'
-        elif current_os == 'Linux':
-            package_manager = 'pip3'
+
+        if current_os == "Windows":
+            package_manager = "pip"
+        elif current_os == "Darwin":
+            package_manager = "pip3"
+        elif current_os == "Linux":
+            package_manager = "pip3"
         else:
             print("unsupported operating system, skipping install")
             return
-        
+
         for library in required_libraries:
             try:
-                subprocess.check_call([package_manager, 'install', library])
+                subprocess.check_call([package_manager, "install", library])
                 print(f"{library} installed successfully, run the script again")
             except subprocess.CalledProcessError:
                 print(f"failed to install {library}")
@@ -134,10 +134,11 @@ class SubtitleGenerator:
             video_with_subtitles.write_videofile(OUTPUT_VID, codec="libx264")
             print(f"saved to {OUTPUT_VID}")
 
+
 def check_ffmpeg() -> bool:
     try:
-        result = subprocess.run(['ffmpeg', '-version'], capture_output=True, text=True)
-        return result.returncode == 0 and 'ffmpeg' in result.stdout
+        result = subprocess.run(["ffmpeg", "-version"], capture_output=True, text=True)
+        return result.returncode == 0 and "ffmpeg" in result.stdout
     except FileNotFoundError:
         return False
 
@@ -174,4 +175,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-    
