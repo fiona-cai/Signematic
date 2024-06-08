@@ -3,6 +3,9 @@ import os
 import yt_dlp as youtube_dl
 from yt_dlp import YoutubeDL
 from youtube_search import YoutubeSearch
+import speech_recognition as sr
+from pydub import AudioSegment
+
 
 YDL_OPTIONS_VIDEO = {
     'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best', 
@@ -18,7 +21,6 @@ YDL_OPTIONS_AUDIO = {
     'noplaylist': 'True',
 }
 
-filename=""
 
 def download_video_and_audio(song, time_length):
     results = YoutubeSearch(song, max_results=15).to_dict()
@@ -42,9 +44,22 @@ def download_video_and_audio(song, time_length):
                 break
     return ''.join(filename_video) + ".mp4", ''.join(filename_audio) + ".wav"
 
-text = speech_to_text(uploaded_file)
-    print("Converted Text:")
-    print(text)
 
+def speech_to_text(audio_file):
+    recognizer = sr.Recognizer()
+    with sr.AudioFile(audio_file) as source:
+        audio = recognizer.record(source)
+        try:
+            text = recognizer.recognize_google(audio)
+            return text
+        except sr.UnknownValueError:
+            return "Could not understand audio"
+        except sr.RequestError as e:
+            return f"Error: {str(e)}"
+        
+        
 video_file, audio_file = download_video_and_audio("The Wait", 60)
 
+text = speech_to_text(audio_file)
+print("Converted Text:")
+print(text)
