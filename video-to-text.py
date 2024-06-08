@@ -111,7 +111,7 @@ def generate_subtitles(audio_file):
     return subtitles
 
 
-video_file, audio_file = download_video_and_audio("English in a Minute: Grow Like a Weed", 60)
+video_file, audio_file = download_video_and_audio("America Ferrera's Iconic Barbie Speech", 152)
 
 text = generate_subtitles(audio_file)
 print("Converted Text:")
