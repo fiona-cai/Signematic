@@ -1,0 +1,13 @@
+mediapipe==0.10.14
+moviepy==1.0.3
+openai==1.33.0
+openai_whisper==20231117
+opencv_python==4.8.1.78
+pydub==0.25.1
+Requests==2.32.3
+SpeechRecognition==3.10.4
+streamlit==1.35.0
+whisper==1.1.10
+youtube_dl==2021.12.17
+youtube_search==2.1.2
+yt_dlp==2024.5.27
