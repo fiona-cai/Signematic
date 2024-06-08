@@ -25,10 +25,11 @@ fetch('hand_landmarks.json')
       const pointRadius = 0.25;
       const geometry = new THREE.SphereGeometry(pointRadius, 32, 16);
       const material = new THREE.MeshBasicMaterial({ color: 0x84FFFF });
-      const sphere = new THREE.Mesh(geometry, material); scene.add(sphere);
+      const sphere = new THREE.Mesh(geometry, material);
       sphere.position.x = x;
       sphere.position.y = y;
       sphere.position.z = z;
+      scene.add(sphere);
     }
 
     function drawLine(x1, y1, z1, x2, y2, z2) {
@@ -76,7 +77,7 @@ fetch('hand_landmarks.json')
 
     let clock = new THREE.Clock();
     let delta = 0;
-    let interval = 1 / 45;
+    let interval = 1 / 500;
 
     function render() {
       requestAnimationFrame(render);
