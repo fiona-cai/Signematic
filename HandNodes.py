@@ -41,10 +41,10 @@ with mp_hands.Hands(static_image_mode=True, max_num_hands=2, min_detection_confi
                     "Right Hand Coordinates: ": handCords if handType == "Right" else[]
                 })
                 frame += 1
-                
                 cv2.imshow('Hand Tracking', image)
                 if cv2.waitKey(5) & 0xFF == ord('q'):
                     break
         cap.release()
+        print("Hand Landmarks for video: ", video.split("/")[-1], " extracted successfully!")
     json.dump(data, file)
 file.close()
