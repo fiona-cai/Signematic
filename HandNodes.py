@@ -4,7 +4,6 @@ import os
 import json
 
 mp_drawing = mp.solutions.drawing_utils
-mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 
 file = open("hand_landmarks.json", "w")
@@ -47,4 +46,40 @@ with mp_hands.Hands(static_image_mode=True, max_num_hands=2, min_detection_confi
         cap.release()
         print("Hand Landmarks for video: ", video.split("/")[-1], " extracted successfully with ", str(frame), " frames")
     json.dump(data, file)
+file.close()
+
+file = open("hand_landmarks.json", "r")
+data = json.load(file)
+file.close()
+
+for word in data:
+    frames = data[word]
+    num_frames = len(frames)
+    if(num_frames > 1):
+        interpolated_frames = []
+        for i in range(num_frames-1):
+            currentFrame = frames[i]
+            nextFrame = frames[i+1]
+            if(nextFrame["Frame Number"] - currentFrame["Frame Number"] > 1):
+                gap = nextFrame["Frame Number"] - currentFrame["Frame Number"]
+                for j in range:
+                    ratio = j/gap
+                    coordinates = []
+                    for joint_id in range(21):
+                        currentCords=joint_id
+                        nextCords=nextFrame["Left Hand Coordinates"][joint_id]
+                        coordinates.append({
+                            "x": currentCords[0] + (nextCords[0] - currentCords[0])*ratio,
+                            "y": currentCords[1] + (nextCords[1] - currentCords[1])*ratio,
+                            "z": currentCords[2] + (nextCords[2] - currentCords[2])*ratio
+                        })
+                    interpolated_frames.append({
+                        "Frame Number": currentFrame["Frame Number"] + j,
+                        "Left Hand Coordinates": coordinates,
+                        "Right Hand Coordinates": coordinates
+                    })
+        frames.extend(interpolated_frames)
+
+file = open("hand_landmarks.json", "w")
+json.dump(data, file)
 file.close()

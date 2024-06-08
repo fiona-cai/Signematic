@@ -1,20 +1,16 @@
 import * as THREE from 'https://cdn.skypack.dev/three@0.132.2';
 
 var container = document.getElementById("ASL-Gestures");
-const fov = 75;
-const aspect = container.clientWidth / container.clientHeight;
-const near = 0.1;
-const far = 1000;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
-const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(container.clientWidth, container.clientHeight);
 container.appendChild(renderer.domElement);
 
-var wordList = ["internet"]
+var wordList = ["canadian","country","is","still","getting","much","smoke"]
 var wordIndex = 0;
 var frameIndex = 0;
 
@@ -24,7 +20,7 @@ fetch('hand_landmarks.json')
     function drawPoint(x, y, z) {
       const pointRadius = 0.25;
       const geometry = new THREE.SphereGeometry(pointRadius, 32, 16);
-      const material = new THREE.MeshBasicMaterial({ color: 0x84FFFF });
+      const material = new THREE.MeshBasicMaterial({color: 0xffffff});
       const sphere = new THREE.Mesh(geometry, material);
       sphere.position.x = x;
       sphere.position.y = y;
@@ -37,7 +33,7 @@ fetch('hand_landmarks.json')
       points.push(new THREE.Vector3(x1, y1, z1));
       points.push(new THREE.Vector3(x2, y2, z2));
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
-      const material = new THREE.LineBasicMaterial({ color: 0xFFFFFF });
+      const material = new THREE.LineBasicMaterial({color: 0xffffff});
       const line = new THREE.Line(geometry, material);
       scene.add(line);
     }
