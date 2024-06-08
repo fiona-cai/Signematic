@@ -10,7 +10,7 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(container.clientWidth, container.clientHeight);
 container.appendChild(renderer.domElement);
 
-var wordList = ["internet"]
+var wordList = ["canadian","country","is","still","getting","much","smoke"]
 var wordIndex = 0;
 var frameIndex = 0;
 
