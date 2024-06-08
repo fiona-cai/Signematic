@@ -1,24 +1,24 @@
-from pytube import YouTube
 from moviepy.editor import *
+import youtube_dl
 
-# Function to download YouTube video and convert it to MP3
-def download_youtube_video_as_mp3(youtube_link, mp3_file_path):
-    # Download video from YouTube
-    yt = YouTube(youtube_link)
-    video = yt.streams.filter(only_audio=True).first().download()
+# Download video from YouTube
+ydl_opts = {
+    'format': 'bestvideo+bestaudio/best',
+    'outtmpl': 'video.mp4',
+    'postprocessors': [{
+        'key': 'FFmpegVideoConvertor',
+        'preferedformat': 'mp4',
+    }],
+}
 
-    # Load the downloaded video
-    video_clip = VideoFileClip(video)
-    
-    # Save the audio from the video as an MP3
-    video_clip.audio.write_audiofile(mp3_file_path)
-    video_clip.close()
+with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+    ydl.download(['Your YouTube video URL here'])
 
-# YouTube video URL
-youtube_link = 'Your YouTube video link here'
+# Convert mp4 to mp3
+video_clip = VideoFileClip('video.mp4')
+audio_clip = video_clip.audio
+audio_clip.write_audiofile('audio.mp3')
 
-# Path to save the MP3 file
-mp3_file_path = "audio.mp3"
-
-# Download the video and save as MP3
-download_youtube_video_as_mp3(youtube_link, mp3_file_path)
+# Close the clips
+video_clip.close()
+audio_clip.close()
