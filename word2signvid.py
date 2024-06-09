@@ -20,4 +20,6 @@ def save_signed_video(w):
         urllib.request.urlretrieve(video_url, f'videos/{w}.mp4')
         return video_url, url
 
-save_signed_video('bye')
+list_of_words = "it is literally impossible to be a woman you are so beautiful and so smart and it kills me that you don't think you're good enough like we have to always be extraordinary but somehow we're always doing it wrong you have to be thin but not too thin and you can never say you want to be thin".split(" ")
+for word in list_of_words:
+    save_signed_video(word)
