@@ -10,17 +10,32 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(container.clientWidth, container.clientHeight);
 container.appendChild(renderer.domElement);
 
-var wordList = ["canadian","country","is","still","getting","much","smoke"]
+var tempList = []
+var wordList = []
 var wordIndex = 0;
 var frameIndex = 0;
 
-fetch('hand_landmarks.json')
+fetch("subtitles-1.txt")
+  .then((res) => res.text())
+  .then((text) => {
+    console.log(text);
+    tempList = text.split("\n");
+    console.log("FIRST WORD: ", tempList[0]);
+    console.log("FIRST WORD: ", tempList[1]);
+
+    for(var i = 0; i < tempList.length; i++) {
+      wordList[i] = tempList[i].split(" ");
+    }
+
+    console.log("WORD LIST: ", wordList[0][0]);
+
+    fetch('hand_landmarks.json')
   .then(response => response.json())
   .then(data => {
     function drawPoint(x, y, z) {
       const pointRadius = 0.25;
       const geometry = new THREE.SphereGeometry(pointRadius, 32, 16);
-      const material = new THREE.MeshBasicMaterial({color: 0xffffff});
+      const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
       const sphere = new THREE.Mesh(geometry, material);
       sphere.position.x = x;
       sphere.position.y = y;
@@ -33,7 +48,7 @@ fetch('hand_landmarks.json')
       points.push(new THREE.Vector3(x1, y1, z1));
       points.push(new THREE.Vector3(x2, y2, z2));
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
-      const material = new THREE.LineBasicMaterial({color: 0xffffff});
+      const material = new THREE.LineBasicMaterial({ color: 0xffffff });
       const line = new THREE.Line(geometry, material);
       scene.add(line);
     }
@@ -87,10 +102,10 @@ fetch('hand_landmarks.json')
           var left = data[wordList[wordIndex]][frameIndex]['Left Hand Coordinates'];
           var right = data[wordList[wordIndex]][frameIndex]['Right Hand Coordinates'];
 
-          for(var i = 0; i < left.length; i++) {
+          for (var i = 0; i < left.length; i++) {
             drawPoint(left[i][0] * 50, left[i][1] * -50, left[i][2] * 50);
           }
-          for(var i = 0; i < right.length; i++) {
+          for (var i = 0; i < right.length; i++) {
             drawPoint(right[i][0] * 50, right[i][1] * -50, right[i][2] * 50);
           }
           connectLines(frameIndex);
@@ -109,4 +124,6 @@ fetch('hand_landmarks.json')
     render();
   })
 
-camera.position.set(27.5, -30, 25);
+  camera.position.set(27.5, -30, 25);
+  })
+  .catch((e) => console.error(e));
