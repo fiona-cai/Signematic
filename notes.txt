@@ -1,0 +1,4 @@
+audio to text -> output to txt 
+word2sign vid (txt) -> videos folder
+stitch video 
+output somewhere
