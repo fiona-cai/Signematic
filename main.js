@@ -1,5 +1,6 @@
 import * as THREE from 'https://cdn.skypack.dev/three@0.132.2';
 
+
 var container = document.getElementById("ASL-Gestures");
 
 const scene = new THREE.Scene();
@@ -88,6 +89,7 @@ fetch("subtitles-1.txt")
 
         function render() {
           requestAnimationFrame(render);
+          capturer.capture(document.getElementById("ASL-Gestures"));
           delta += clock.getDelta();
 
           if (delta > interval) {
@@ -112,7 +114,7 @@ fetch("subtitles-1.txt")
                 frameIndex = 0;
                 wordIndex++;
               }
-              if (wordIndex >= wordList.length) {
+              if (wordIndex < wordList.length) {
                 console.log(clock.elapsedTime)
                 while (clock.elapsedTime < (sentenceIndex + 1) * 3) { }
                 console.log("YAY")
@@ -130,7 +132,6 @@ fetch("subtitles-1.txt")
 
         render();
       })
-
     camera.position.set(27.5, -30, 25);
   })
   .catch((e) => console.error(e));
