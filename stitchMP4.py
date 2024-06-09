@@ -1,54 +1,35 @@
 import os
 import subprocess
 import time
+from moviepy.editor import *
+import moviepy.video.fx.all as vfx
 
-base_dir = "videos/"
+path = "videos/"
 video_files = "video_list.txt"
-output_file = "output.avi"
-
-file_list = open(video_files, "w")
-
-try:
-    os.remove(output_file)
-except OSError:
-    pass
 
 f = open("subtitles-1.txt", "r")
 text = f.read()
 list_of_words = text.lower().split(";")
-files = list_of_words[0].split(" ")
 
-start = time.time()
-for root, dirs in os.walk(base_dir):
-    for video in files:
-        if video.endswith(".mp4"):
-            file_list.write("file './%s'\n" % video)
-file_list.close()
+files = []
+idx = 0
 
-# merge the video files
-cmd = ["ffmpeg",
-       "-f",
-       "concat",
-       "-safe",
-       "0",
-       "-loglevel",
-       "quiet",
-       "-i",
-       "%s" % video_files,
-       "-c",
-       "copy",
-       "%s" % output_file
-       ]
+for i in range(len(list_of_words)):
+    word = list_of_words[i].split(" ")
+    for file in os.listdir(path):
+        if file.endswith(".mp4") and file.split(".")[0] in word:
+            try:
+                files.append(VideoFileClip(path + file))
+            except:
+                print("Error: " + file)
+    final = concatenate_videoclips(files)
+    final = final.fx(vfx.speedx, 3)
+    final.write_videofile("output" + str(i) + ".mp4", codec="libx264", audio_codec="aac")
 
-p = subprocess.Popen(cmd, stdin=subprocess.PIPE)
+files = []
 
-fout = p.stdin
-fout.close()
-p.wait()
+for i in range(len(list_of_words)):
+    files.append(VideoFileClip("output" + str(i) + ".mp4"))
 
-print(p.returncode)
-if p.returncode != 0:
-    raise subprocess.CalledProcessError(p.returncode, cmd)
-
-end = time.time()
-print("Merging the files took", end - start, "seconds.")
+final = concatenate_videoclips(files)
+final.write_videofile("output.mp4", codec="libx264", audio_codec="aac")
