@@ -17,7 +17,8 @@ def save_signed_video(w):
             soup = BeautifulSoup(r.content, 'html.parser')
         new_list = [x for x in soup.find_all('video')[0].contents if str(x).find('src') != -1]
         video_url = new_list[0].attrs['src']
-        urllib.request.urlretrieve(video_url, f'videos/{w}.mp4')
+        print(f'saving {video_url} to videos/{w}.mp4')
+        #urllib.request.urlretrieve(video_url, f'videos/{w}.mp4')
         return video_url, url
 
 f = open("subtitles-1.txt", "r")

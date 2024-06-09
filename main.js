@@ -82,14 +82,13 @@ fetch("subtitles-1.txt")
 
         let clock = new THREE.Clock();
         let delta = 0;
-        let interval = 1 / 500;
+        let interval = 1 / 5;
         console.log(sentenceList[sentenceIndex])
         var sentence = sentenceList[sentenceIndex].toLowerCase();
         var wordList = sentence.split(" ");
 
         function render() {
           requestAnimationFrame(render);
-          capturer.capture(document.getElementById("ASL-Gestures"));
           delta += clock.getDelta();
 
           if (delta > interval) {
@@ -115,9 +114,6 @@ fetch("subtitles-1.txt")
                 wordIndex++;
               }
               if (wordIndex < wordList.length) {
-                console.log(clock.elapsedTime)
-                while (clock.elapsedTime < (sentenceIndex + 1) * 3) { }
-                console.log("YAY")
                 wordIndex = 0;
                 sentenceIndex++;
                 sentence = sentenceList[sentenceIndex]
