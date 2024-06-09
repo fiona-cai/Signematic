@@ -1,7 +1,7 @@
 import os
 import sys
-from .video2text import download_video_and_audio, generate_subtitles
-from .word2signvid import save_signed_video
+from video2text import download_video_and_audio, generate_subtitles
+from word2signvid import save_signed_video
 from .stitchMP4 import create_video
 
 video_file, audio_file = download_video_and_audio("America Ferrera's Iconic Barbie Speech", 152)
