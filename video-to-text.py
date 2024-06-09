@@ -106,7 +106,7 @@ def generate_subtitles(audio_file):
     subtitles = ""
     for chunk in chunk_data:
         text = transcribe_audio_to_text(io.BytesIO(chunk))
-        subtitles += "{0}\n".format(text)
+        subtitles += "{0},".format(text)
 
     return subtitles
 
