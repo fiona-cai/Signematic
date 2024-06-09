@@ -10,8 +10,8 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(container.clientWidth, container.clientHeight);
 container.appendChild(renderer.domElement);
 
-var tempList = []
-var wordList = []
+var sentenceList = []
+var sentenceIndex = 0;
 var wordIndex = 0;
 var frameIndex = 0;
 
@@ -19,15 +19,7 @@ fetch("subtitles-1.txt")
   .then((res) => res.text())
   .then((text) => {
     console.log(text);
-    tempList = text.split("\n");
-    console.log("FIRST WORD: ", tempList[0]);
-    console.log("FIRST WORD: ", tempList[1]);
-
-    for(var i = 0; i < tempList.length; i++) {
-      wordList[i] = tempList[i].split(" ");
-    }
-
-    console.log("WORD LIST: ", wordList[0][0]);
+    sentenceList = text.split(";");
 
     fetch('hand_landmarks.json')
   .then(response => response.json())
@@ -89,6 +81,9 @@ fetch("subtitles-1.txt")
     let clock = new THREE.Clock();
     let delta = 0;
     let interval = 1 / 500;
+    console.log(sentenceList[sentenceIndex])
+    var sentence = sentenceList[sentenceIndex].toLowerCase();
+    var wordList = sentence.split(" ");
 
     function render() {
       requestAnimationFrame(render);
@@ -97,8 +92,9 @@ fetch("subtitles-1.txt")
       if (delta > interval) {
         delta = delta % interval;
 
-        if (wordList.length > 0 && wordIndex < wordList.length) {
+        if (sentenceList.length > 0 && sentenceIndex < sentenceList.length) {
 
+          console.log(wordList[wordIndex])
           var left = data[wordList[wordIndex]][frameIndex]['Left Hand Coordinates'];
           var right = data[wordList[wordIndex]][frameIndex]['Right Hand Coordinates'];
 
@@ -114,6 +110,16 @@ fetch("subtitles-1.txt")
           if (frameIndex >= data[wordList[wordIndex]].length) {
             frameIndex = 0;
             wordIndex++;
+          }
+          if(wordIndex >= wordList.length) {
+            console.log(clock.elapsedTime)
+            while(clock.elapsedTime < (sentenceIndex + 1) * 3) {}
+            console.log("YAY")
+            wordIndex = 0;
+            sentenceIndex++;
+            sentence = sentenceList[sentenceIndex]
+            sentence = sentence.toLowerCase();
+            wordList = sentence.split(" ");
           }
         }
         renderer.render(scene, camera);
