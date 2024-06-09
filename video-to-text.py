@@ -6,7 +6,8 @@ from youtube_search import YoutubeSearch
 import speech_recognition as sr
 from pydub import AudioSegment
 import io
-
+from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
+from moviepy.editor import VideoFileClip
 
 YDL_OPTIONS_VIDEO = {
     "format": "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
@@ -110,9 +111,25 @@ def generate_subtitles(audio_file):
 
     return subtitles
 
+def crop_square(video_file):
+    clip = VideoFileClip(video_file)
+    width, height = clip.size
+    min_dimension = min(width, height)
 
+    # Crop to square
+    cropped_clip = clip.crop(
+        width=min_dimension,
+        height=min_dimension,
+        x_center=clip.w/2,
+        y_center=clip.h/2
+    )
+
+    # Save the cropped video
+    cropped_clip.write_videofile("cropped_" + video_file)
+    
 video_file, audio_file = download_video_and_audio("America Ferrera's Iconic Barbie Speech", 152)
 
+crop_square(video_file)
 text = generate_subtitles(audio_file)
 print("Converted Text:")
 print(text)
