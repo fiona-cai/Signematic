@@ -22,7 +22,7 @@ with mp_hands.Hands(
                 success, image = cap.read()
                 if not success:
                     break
-                image = cv2.resize(image, (800, 750))
+                image = cv2.resize(image, (1000, 800))
                 results = hands.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
                 if results.multi_hand_landmarks:
                     handCords = {}
@@ -67,10 +67,7 @@ with mp_hands.Hands(
     json.dump(data, file)
 file.close()
 
-file = open("hand_landmarks.json", "r")
-data = json.load(file)
-file.close()
-
+# Interpolate gaps between frames
 for word in data:
     frames = data[word]
     num_frames = len(frames)
@@ -81,11 +78,11 @@ for word in data:
             nextFrame = frames[i + 1]
             if nextFrame["Frame Number"] - currentFrame["Frame Number"] > 1:
                 gap = nextFrame["Frame Number"] - currentFrame["Frame Number"]
-                for j in range:
+                for j in range(1, gap):
                     ratio = j / gap
                     coordinates = []
                     for joint_id in range(21):
-                        currentCords = joint_id
+                        currentCords = currentFrame["Left Hand Coordinates"][joint_id]
                         nextCords = nextFrame["Left Hand Coordinates"][joint_id]
                         coordinates.append(
                             {
